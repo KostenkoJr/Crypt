@@ -1,234 +1,214 @@
 <?php
 require_once __DIR__ . '/functions.php';
-?>
-
-<!doctype html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport"
-          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="main.css">
-    <title>Document</title>
-</head>
-<body>
-<div class="container">
-    <div class="item">
-        <h2>S1</h2>
-        <table>
-            <tr>
-                <td>4</td>
-                <td>6</td>
-                <td>6</td>
-                <td>3</td>
-                <td>1</td>
-                <td>3</td>
-                <td>7</td>
-                <td>4</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td>1</td>
-                <td>5</td>
-                <td>7</td>
-                <td>2</td>
-                <td>0</td>
-                <td>0</td>
-                <td>2</td>
-            </tr>
-        </table>
-    </div>
-    <div class="item">
-        <h2>S2</h2>
-        <table>
-            <tr>
-                <td>6</td>
-                <td>3</td>
-                <td>6</td>
-                <td>0</td>
-                <td>4</td>
-                <td>1</td>
-                <td>7</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td>5</td>
-                <td>1</td>
-                <td>7</td>
-                <td>2</td>
-                <td>4</td>
-                <td>0</td>
-                <td>5</td>
-            </tr>
-        </table>
-    </div>
-    <div class="item">
-        <h2>S3</h2>
-        <table>
-            <tr>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>2</td>
-                <td>2</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td>0</td>
-                <td>3</td>
-                <td>3</td>
-            </tr>
-            <tr>
-                <td>1</td>
-                <td>1</td>
-                <td>3</td>
-                <td>3</td>
-            </tr>
-        </table>
-    </div>
-    <div class="item">
-        <h2>P/E</h2>
-        <table>
-            <tr>
-                <td>4</td>
-                <td>6</td>
-                <td>3</td>
-                <td>2</td>
-                <td>1</td>
-                <td>5</td>
-                <td>8</td>
-                <td>7</td>
-                <td>4</td>
-                <td>1</td>
-                <td>6</td>
-                <td>3</td>
-            </tr>
-        </table>
-    </div>
-</div>
-
-</body>
-</html>
-
-<?php
 
 /** Выход 1 */
 
-$out_s1 = [4, 6, 6, 3, 1, 3, 7, 4, 5, 1, 5, 7, 2, 0, 0, 2]; // Выход блока S1
-$out_s1_gmp = [];
-for ($i = 0; $i < 16; $i++)
-{
-    $out_s1_gmp[]  = gmp_init($out_s1[$i], 10);
-}
-
-$result_arr = [];
-
-//var_dump($out_s1_gmp);
-
-/** Вход 1 */
-$in_s = [];
-for ($i = 0; $i < 16; $i++)
-{
-    $in_s[] = gmp_init($i, 10);
-}
-
-//var_dump($in_s);
-
-
-for ($d = 0; $d < 16; $d++) {
-
-    echo '<h1>' . outDisplayNum($in_s[$d]) .  '</h1>';
-    /** Вход 2*/
-    $arr_test = [];
-
-    for ($i = 0; $i < 16; $i++) {
-        $arr_test[] = gmp_xor($in_s[$i], $in_s[$d]);
-    }
-
-    /** Выход 2 */
-
-    $out2_s1 = [];
-
-    for ($i = 0; $i < 16; $i++) {
-        $key = array_search($arr_test[$i], $in_s);
-        $out2_s1[] = $out_s1[$key];
-    }
-
-    /** delta C1 */
-
-    $delta_C = [];
-
-    for ($i = 0; $i < 16; $i++) {
-        $delta_C[] = gmp_xor($out_s1_gmp[$i], $out2_s1[$i]);
-    }
-
-
-    $test_array = array_count_values(outDisplayOut($delta_C));
-
-    $result_count = [];
-
-    foreach ($test_array as $key => $count)
-    {
-        $key = strval($key);
-        $result_count[$key] = $count;
-    }
-
-
-
-
-    var_dump(outDisplayOut($delta_C));
-    var_dump($test_array);
-    var_dump($result_count);
-    $result_arr[outDisplayNum($d)] = array_count_values(outDisplayOut($delta_C));
-
-
-
-}
-?>
-
-    <table>
-        <thead>
-        <tr>
-            <td>delta C/A</td>
-            <?php for ($i = 0; $i < 8; $i++):?>
-                <td><?php echo outDisplayNum3($i)?></td>
-            <?php endfor;?>
-        </tr>
-<!--        --><?php //for ($i = 0; $i < 16; $i++):?>
-
-        <tr>
-
-        </tr>
-        </thead>
-    </table>
-
-<?php
-
-    var_dump($result_arr);
-    var_dump($out_s1_gmp);
-    //for ($)
-die();
-
-
-
-/*
 $out_s1 = [6, 0, 7, 6, 0, 4, 1, 1, 4, 5, 5, 3, 2, 2, 7, 3]; // Выход блока S1
 $out_s2 = [4, 0, 1, 4, 0, 7, 3, 5, 3, 5, 7, 6, 2, 1, 6, 2]; // Выход блока S2
 $out_s3 = [2, 0, 0, 2, 3, 2, 2, 1, 0, 1, 0, 3, 1, 3, 3, 1]; // Выход блока S3
 $PE = [6, 7, 4, 1, 3, 2, 5, 8, 6, 4, 7, 1];
 
- */
+/** ---------------------------------------------------------------------------------------- */
+
+
+/** Вход 1*/
+
+$in_s1 = [];
+for ($i = 0; $i < 16; $i++)
+{
+    $in_s1[] = binarView4(decbin($i));
+}
+
+
+$xr = read_savetxt_xr();
+/** ----------------------------------------------------S1---------------------------------------------- */
+
+/** Получаем delta A и delta C для каждого S-блока*/
+$s1_block = deltaA(s_Block($out_s1));
+$s2_block = deltaA(s_Block($out_s2));
+$s3_block = deltaA(s_Block3($out_s3));
+var_dump($s1_block);
+var_dump($s2_block);
+var_dump($s3_block);
+
+echo '<h1>' . 'XR' . '</h1>';
+/** Массив со значениями delta C для определенного delta A (второй параметр) для S1*/
+$arr_delta_C_S1 = s_Block_delta_C($out_s1, 10);
+
+
+$arr_index = [];
+foreach ($arr_delta_C_S1 as $key => $value)
+{
+    if ($value == '011')
+        $arr_index[] = $key;
+}
+
+
+
+$bits_4_XR = [];
+foreach ($xr as $value)
+{
+    $bits_4_XR[] = substr(permitation($value,'674132586471'), 0, 4);
+}
+
+/** Массив с подключами для S1 */
+$arr_K1 = [];
+for ($i = 0; $i < count($bits_4_XR); $i++) {
+    foreach ($arr_index as $value) {
+        $arr_K1[] = xorNum($in_s1[$value], $bits_4_XR[$i]);
+    }
+}
+
+
+/** ---------------------------------------------------- S2 ---------------------------------------------- */
+/** Массив со значениями delta C для определенного delta A (второй параметр) для S2*/
+$arr_delta_C_S2 = s_Block_delta_C($out_s2, 15);
+
+$arr_index = [];
+foreach ($arr_delta_C_S2 as $key => $value)
+{
+    if ($value == 110)
+        $arr_index[] = $key;
+}
+
+
+$bits_4_XR = [];
+foreach ($xr as $value)
+{
+    $bits_4_XR[] = substr(permitation($value,'674132586471'), 4, 4);
+}
+
+
+$arr_K2 = [];
+for ($i = 0; $i < count($bits_4_XR); $i++) {
+    foreach ($arr_index as $value) {
+        $arr_K2[] = xorNum($in_s1[$value], $bits_4_XR[$i]);
+    }
+}
+
+/** ---------------------------------------------------- S3 ---------------------------------------------- */
+$arr_delta_C_S3 = s_Block_delta_C_S3($out_s3, 12);
+
+$arr_index = [];
+foreach ($arr_delta_C_S3 as $key => $value)
+{
+    if ($value == 11)
+        $arr_index[] = $key;
+}
+
+
+$bits_4_XR = [];
+foreach ($xr as $value)
+{
+    $bits_4_XR[] = substr(permitation($value,'674132586471'), 8, 4);
+}
+
+
+$arr_K3 = [];
+for ($i = 0; $i < count($bits_4_XR); $i++) {
+    foreach ($arr_index as $value) {
+        $arr_K3[] = xorNum($in_s1[$value], $bits_4_XR[$i]);
+    }
+}
+$result_K11 = array_count_values($arr_K1);
+$result_K12 = array_count_values($arr_K2);
+$result_K13 = array_count_values($arr_K3);
+ksort($result_K11);
+ksort($result_K12);
+ksort($result_K13);
+echo 'S1';
+var_dump($result_K11);
+echo 'S2';
+var_dump($result_K12);
+echo 'S3';
+var_dump($result_K13);
+
+
+/** _____________________________________________________________________YR_______________________________________________________________________________ */
+$arr_K1 = [];
+$arr_K2 = [];
+$arr_K3 = [];
+
+
+echo '<h1>' . 'YR' . '</h1>';
+$yr = read_savetxt_yr();
+$yl = read_savetxt_yl();
+/** Массив со значениями delta C для определенного delta A (второй параметр) для S1*/
+$arr_delta_C_S1 = s_Block_delta_C($out_s1, 10);
+
+for ($y = 0; $y < count($yr); $y++) {
+    $arr_index = [];
+    foreach ($arr_delta_C_S1 as $key => $value) {
+        if ($value == substr($yl[$y], 0, 3))
+            $arr_index[] = $key;
+    }
+
+
+    $bits_4_XR = [];
+    foreach ($yr as $value) {
+        $bits_4_XR[] = substr(permitation($value, '674132586471'), 0, 4);
+    }
+
+    /** Массив с подключами для S1 */
+
+    foreach ($arr_index as $value) {
+        $arr_K1[] = xorNum($in_s1[$value], $bits_4_XR[$y]);
+    }
 
 
 
 
+    /** ---------------------------------------------------- S2 ---------------------------------------------- */
+    /** Массив со значениями delta C для определенного delta A (второй параметр) для S2*/
+    $arr_delta_C_S2 = s_Block_delta_C($out_s2, 15);
 
 
+    $arr_index = [];
+    foreach ($arr_delta_C_S2 as $key => $value) {
+        if ($value == substr($yl[$y], 3, 3))
+            $arr_index[] = $key;
+    }
 
+
+    $bits_4_XR = [];
+    foreach ($yr as $value) {
+        $bits_4_XR[] = substr(permitation($value, '674132586471'), 4, 4);
+    }
+
+
+    foreach ($arr_index as $value) {
+        $arr_K2[] = xorNum($in_s1[$value], $bits_4_XR[$y]);
+    }
+
+    /** ---------------------------------------------------- S3 ---------------------------------------------- */
+    $arr_delta_C_S3 = s_Block_delta_C_S3($out_s3, 12);
+
+    $arr_index = [];
+    foreach ($arr_delta_C_S3 as $key => $value) {
+        if ($value == substr($yl[$y], 6, 2))
+            $arr_index[] = $key;
+    }
+
+
+    $bits_4_XR = [];
+    foreach ($yr as $value) {
+        $bits_4_XR[] = substr(permitation($value, '674132586471'), 8, 4);
+    }
+
+    foreach ($arr_index as $value) {
+        $arr_K3[] = xorNum($in_s1[$value], $bits_4_XR[$y]);
+    }
+
+}
+$result_K31 = array_count_values($arr_K1);
+$result_K32 = array_count_values($arr_K2);
+$result_K33 = array_count_values($arr_K3);
+ksort($result_K31);
+ksort($result_K32);
+ksort($result_K33);
+echo 'S1';
+var_dump($result_K31);
+echo 'S2';
+var_dump($result_K32);
+echo 'S3';
+var_dump($result_K33);
